@@ -114,12 +114,20 @@ let defaultText = document.getElementById('default-text');
 let stats = document.getElementById('stats');
 let activityCount = document.getElementById('activity-count');
 let activeContainer = document.getElementById('active');
+let summarize = document.getElementById('summarize')
 
-btns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    chrome.tabs.create({ url: 'dashboard.html' });
+  const summaries = [
+      "This site may collect and share your personal information. You're good to go!",
+      "Your usage data may be tracked and used for marketing purposes. You're good to go!",
+      "By using this site, you consent to the collection of your data. You're good to go!",
+      "This site may share your information with third-party partners."
+  ];
+
+  summarize.addEventListener('click', () => {
+    const randomIndex = Math.floor(Math.random() * 4);
+    alert(summaries[randomIndex]);
   });
-});
+
 
 links.forEach(link => {
   link.addEventListener('click', () => {
@@ -165,45 +173,45 @@ const checkIfActive = () => {
   console.log('Current state.active:', state.active);
 };
 
-// const checkUrlSafety = (url, callback) => {
-//   const apiKey = 'AIzaSyBLo00DkJ6Td_vNnGB8yqtERV497c-rX4Y'; // Replace with your actual API key
-//   const requestBody = {
-//     client: {
-//       clientId: 'yourcompanyname',
-//       clientVersion: '1.5.2'
-//     },
-//     threatInfo: {
-//       threatTypes: ['MALWARE', 'SOCIAL_ENGINEERING'],
-//       platformTypes: ['ANY_PLATFORM'],
-//       threatEntryTypes: ['URL'],
-//       threatEntries: [
-//         { url: url }
-//       ]
-//     }
-//   };
+const checkUrlSafety = (url, callback) => {
+  const apiKey = 0
+  const requestBody = {
+    client: {
+      clientId: 'yourcompanyname',
+      clientVersion: '1.5.2'
+    },
+    threatInfo: {
+      threatTypes: ['MALWARE', 'SOCIAL_ENGINEERING'],
+      platformTypes: ['ANY_PLATFORM'],
+      threatEntryTypes: ['URL'],
+      threatEntries: [
+        { url: url }
+      ]
+    }
+  };
 
-//   fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKey}`, {
-//     method: 'POST',
-//     body: JSON.stringify(requestBody),
-//     headers: {
-//       'Content-Type': 'application/json'
-//     }
-//   })
-//   .then(response => {
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
-//     return response.json();
-//   })
-//   .then(data => {
-//     console.log('Safe Browsing API response:', data); // Debugging: Log the API response
-//     callback(data && data.matches && data.matches.length > 0);
-//   })
-//   .catch(error => {
-//     console.error('Error checking URL safety:', error);
-//     callback(false);
-//   });
-// };
+  fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=AIzaSyBLo00DkJ6Td_vNnGB8yqtERV497c-rX4Y`, {
+    method: 'POST',
+    body: JSON.stringify(requestBody),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Safe Browsing API response:', data); // Debugging: Log the API response
+    callback(data && data.matches && data.matches.length > 0);
+  })
+  .catch(error => {
+    console.error('Error checking URL safety:', error);
+    callback(false);
+  });
+};
 
 const updateSiteName = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
