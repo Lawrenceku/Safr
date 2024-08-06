@@ -8,6 +8,7 @@
     },
     "permissions": [
       "declarativeNetRequest",
+      "declarativeNetRequestFeedback",
       "activeTab",
       "storage"
     ],

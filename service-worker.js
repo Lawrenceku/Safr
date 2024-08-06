@@ -21,11 +21,11 @@
 // //     ["blocking"]
 // // )
 
-chrome.runtime.onInstalled.addListener(() => {
-	console.log('Safr extension installed and running.');
-  });
+// chrome.runtime.onInstalled.addListener(() => {
+// 	console.log('Safr extension installed and running.');
+//   });
   
-  const apiKey = 'AIzaSyBLo00DkJ6Td_vNnGB8yqtERV497c-rX4Y';
+//   const apiKey = 'AIzaSyBLo00DkJ6Td_vNnGB8yqtERV497c-rX4Y';
   
 //   async function checkUrlWithGoogleSafeBrowsing(url) {
 // 	const requestBody = {
@@ -65,3 +65,33 @@ chrome.runtime.onInstalled.addListener(() => {
 // 	["blocking"]
 //   );
   
+
+let adBlockCount = 0;
+
+chrome.declarativeNetRequest.onRuleMatchedDebug.addListener((info) => {
+  console.log('Rule matched:', info);
+  adBlockCount++;
+  // Optionally, store the count in storage for persistence
+  chrome.storage.local.set({ adBlockCount });
+});
+
+// Function to retrieve the count (for use in popup or other parts of the extension)
+const getAdBlockCount = (callback) => {
+  chrome.storage.local.get(['adBlockCount'], (result) => {
+    callback(result.adBlockCount || 0);
+  });
+};
+
+// Example of retrieving the count and logging it
+getAdBlockCount((count) => {
+  console.log('Total ads blocked:', count);
+});
+
+// Ensure the initial count is stored
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.set({ adBlockCount: 0 });
+});
+
+
+////////////////TLDR//////////////////////
+

@@ -3,6 +3,8 @@ let links = document.querySelectorAll('.page')
 let currSiteName = document.getElementById('site-name');
 let defaultImg = document.getElementById('default-img');
 let defaultText = document.getElementById('default-text');
+let stats = document.getElementById('stats')
+let activityCount = document.getElementById('activity-count')
 let activeContainer = document.getElementById('active')
 // let canvas = document.getElementById('canvas'); // Assuming canvas is defined somewhere in your HTML
 
@@ -18,7 +20,16 @@ chrome.tabs.create({ url: 'https://safrapp.vercel.app/' });
   });
 });
 
+stats.addEventListener('click', () => {
+  chrome.tabs.create({ url: 'dashboard.html' });
+    });
 
+    document.addEventListener('DOMContentLoaded', () => {
+      chrome.storage.local.get(['adBlockCount'], (result) => {
+        activityCount.textContent = result.adBlockCount || 0;
+      });
+    });
+    
 
 const state = { active: false };
 
