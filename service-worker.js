@@ -15,57 +15,8 @@
 // 	"*://*.zedo.com/*",
 // ]
 
-// // chrome.webRequest.onBeforeRequest.addListener(
-// //     function(details) { return { cancel: true }},
-// //     { urls: defaultFilters },
-// //     ["blocking"]
-// // )
-
-// chrome.runtime.onInstalled.addListener(() => {
-// 	console.log('Safr extension installed and running.');
-//   });
   
-//   const apiKey = 'AIzaSyBLo00DkJ6Td_vNnGB8yqtERV497c-rX4Y';
-  
-//   async function checkUrlWithGoogleSafeBrowsing(url) {
-// 	const requestBody = {
-// 	  client: {
-// 		clientId: 'your-client-id',
-// 		clientVersion: '1.0'
-// 	  },
-// 	  threatInfo: {
-// 		threatTypes: ['MALWARE', 'SOCIAL_ENGINEERING'],
-// 		platformTypes: ['ANY_PLATFORM'],
-// 		threatEntryTypes: ['URL'],
-// 		threatEntries: [{ url: url }]
-// 	  }
-// 	};
-  
-// 	const response = await fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${apiKey}`, {
-// 	  method: 'POST',
-// 	  headers: {
-// 		'Content-Type': 'application/json'
-// 	  },
-// 	  body: JSON.stringify(requestBody)
-// 	});
-  
-// 	const data = await response.json();
-// 	return data.matches ? true : false;
-//   }
-  
-//   chrome.webRequest.onBeforeRequest.addListener(
-// 	async (details) => {
-// 	  const isMalicious = await checkUrlWithGoogleSafeBrowsing(details.url);
-// 	  if (isMalicious) {
-// 		console.log(`Blocked malicious URL: ${details.url}`);
-// 		return { cancel: true };
-// 	  }
-// 	},
-// 	{ urls: ["<all_urls>"] },
-// 	["blocking"]
-//   );
-  
-
+/////////////ADBBLOCK///////////////
 let adBlockCount = 0;
 
 chrome.declarativeNetRequest.onRuleMatchedDebug.addListener((info) => {
@@ -94,4 +45,40 @@ chrome.runtime.onInstalled.addListener(() => {
 
 
 ////////////////TLDR//////////////////////
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'extractText') {
+    const textToSummarize = message.text;
+
+    // Prepare the API request to summarize the text
+    fetch('https://api.ai21.com/studio/v1/summarize', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'KOeMy5Gfw8xkKEtCIKLLYtJUntTCekJt',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        source: textToSummarize,
+        sourceType: 'TEXT'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Summary response:', data);
+
+      // Process the summary or notify the user
+      if (data && data.summary) {
+        // Send summary back to the content script or handle it as needed
+        chrome.runtime.sendMessage({ type: 'summary', summary: data.summary });
+      }
+    })
+    .catch(error => {
+      console.error('Error summarizing text:', error);
+    });
+  }
+});
 

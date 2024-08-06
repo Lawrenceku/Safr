@@ -6,11 +6,15 @@
     "background": {
       "service_worker": "/service-worker.js"
     },
+    "host_permissions": ["<all_urls>"],
+    
     "permissions": [
       "declarativeNetRequest",
       "declarativeNetRequestFeedback",
       "activeTab",
-      "storage"
+      "storage",
+      "webNavigation",
+    "scripting"
     ],
     "action": {
       "default_icon": {
@@ -28,6 +32,12 @@
           "path": "rules.json"
         }
       ]
+    },
+    "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
+  ]
   }
   
