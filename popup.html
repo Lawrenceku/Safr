@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safr Extension Popup</title>
+    <link rel="stylesheet" href="/style/popup.css">
+</head>
+<body>
+    <header>
+        <a class="page" href="#"><img src="/assets/lock.png" alt=""></a>
+        <span id="site-name" class="site-name"></span>
+        <span class="menu-btn">&#9776;</span>
+      </header>
+      <div class="container">
+        <div class="hero">
+          <img id="default-img" height="200px" width="200px" src="/assets/sleeping-cat.png" alt="">
+          <span id="default-text" style="text-align: center; font-size: small; width: 80%;"><b style="font-size: medium; ">Safr has nothing to do on this page</b><br>
+            Navigate to a website to see Safr in action.</span>
+            <div id="active">
+              <p>ACTIVE!</p>
+            </div>
+        </div>
+    
+        <div class="btn-container">
+          <button id="one" class="btn" >Ad-Blocking <span id="btn-state">Enabled</span></button>
+          <button class="btn"  >Safe Mode<span id="btn-state">Enabled</span></button>
+          <button class="btn"  >TL;DR Detection<span id="btn-state">Enabled</span></button>
+        </div>
+        <p><a class="page" href="">Built by Team Safr for ECX Hackathon.</a></p>
+      </div>
+      <script src='/scripts/popup.js'></script>
+</body>
+</html>
